@@ -12,7 +12,7 @@ use crate::specification::entities::{
 };
 
 /// # Description:
-/// Implementation of [`LweCiphertextDiscardingAffineTransformationEngine`] for [`CoreEngine`] that
+/// Implementation of [`LweCiphertextVectorDiscardingAffineTransformationEngine`] for [`CoreEngine`] that
 /// operates on 32 bits integers.
 impl
     LweCiphertextVectorDiscardingAffineTransformationEngine<
@@ -104,7 +104,7 @@ impl
 }
 
 /// # Description:
-/// Implementation of [`LweCiphertextDiscardingAffineTransformationEngine`] for [`CoreEngine`] that
+/// Implementation of [`LweCiphertextVectorDiscardingAffineTransformationEngine`] for [`CoreEngine`] that
 /// operates on 64 bits integers.
 impl
     LweCiphertextVectorDiscardingAffineTransformationEngine<
