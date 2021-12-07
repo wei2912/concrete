@@ -1,8 +1,6 @@
 //! A module containing sampling entry points for raw integers
-use concrete_commons::dispersion::{DispersionParameter, Variance};
 use concrete_commons::numeric::{CastInto, UnsignedInteger};
 use concrete_core::backends::core::private::math::random::RandomGenerator;
-use kolmogorov_smirnov;
 
 /// A trait to generate raw unsigned integer values.
 pub trait RawUnsignedIntegers: UnsignedInteger + CastInto<f64> {
