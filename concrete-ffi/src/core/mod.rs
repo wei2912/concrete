@@ -1587,6 +1587,15 @@ impl Into<&[u8]> for BufferView {
     }
 }
 
+impl From<&[u8]> for BufferView {
+    fn from(a: &[u8]) -> Self {
+        BufferView {
+            pointer: a.as_ptr(),
+            length: a.len(),
+        }
+    }
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn serialize_lwe_bootstrap_key_u64(
     bootstrap_key: *const LweBootstrapKey<u64>,
@@ -1645,4 +1654,44 @@ pub unsafe extern "C" fn deserialize_lwe_secret_key_u64(
     let b = LweSecretKey(a);
 
     boxmut!(b)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn serialize_lwe_ciphertext_u64(
+    ciphertext: *const LweCiphertext<u64>,
+) -> BufferView {
+    let ciphertext = ciphertext.as_ref().unwrap();
+
+    let slice_u64 = ciphertext.0.as_tensor().as_slice();
+
+    let slice_u8 = std::slice::from_raw_parts(
+        slice_u64.as_ptr() as *mut u8,
+        slice_u64.len() * std::mem::size_of::<u64>(),
+    );
+
+    slice_u8.into()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn deserialize_lwe_ciphertext_u64(
+    ciphertext: BufferView,
+) -> *mut LweCiphertext<u64> {
+    let slice_u8: &[u8] = ciphertext.into();
+
+    assert_eq!(slice_u8.len() % std::mem::size_of::<u64>(), 0);
+    let new_len_u64 = slice_u8.len() / std::mem::size_of::<u64>();
+
+    let slice_u64 = std::slice::from_raw_parts(slice_u8.as_ptr() as *mut u64, new_len_u64);
+
+    let mut ct = CoreLweCiphertext::allocate(0, LweSize(new_len_u64));
+
+    assert_eq!(ct.as_tensor().as_slice().len(), new_len_u64);
+
+    for (a, b) in ct.as_mut_tensor().iter_mut().zip(slice_u64.iter()) {
+        *a = *b;
+    }
+
+    let ct = LweCiphertext(ct);
+
+    boxmut!(ct)
 }
