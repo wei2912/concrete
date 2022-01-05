@@ -6,7 +6,7 @@ use concrete_commons::parameters::LweDimension;
 
 /// A structure representing an LWE secret key with 32 bits of precision.
 #[derive(Debug, Clone, PartialEq)]
-pub struct LweSecretKey32(pub(crate) ImpLweSecretKey<BinaryKeyKind, Vec<u32>>);
+pub struct LweSecretKey32(pub ImpLweSecretKey<BinaryKeyKind, Vec<u32>>);
 impl AbstractEntity for LweSecretKey32 {
     type Kind = LweSecretKeyKind;
 }

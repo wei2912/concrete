@@ -5,7 +5,7 @@ use concrete_commons::parameters::{GlweDimension, PolynomialSize};
 
 /// A structure representing a GLWE ciphertext with 32 bits of precision.
 #[derive(Debug, Clone, PartialEq)]
-pub struct GlweCiphertext32(pub(crate) ImplGlweCiphertext<Vec<u32>>);
+pub struct GlweCiphertext32(pub ImplGlweCiphertext<Vec<u32>>);
 impl AbstractEntity for GlweCiphertext32 {
     type Kind = GlweCiphertextKind;
 }

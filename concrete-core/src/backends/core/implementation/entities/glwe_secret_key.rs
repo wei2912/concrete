@@ -6,7 +6,7 @@ use concrete_commons::parameters::{GlweDimension, PolynomialSize};
 
 /// A structure representing a GLWE secret key with 32 bits of precision.
 #[derive(Debug, Clone, PartialEq)]
-pub struct GlweSecretKey32(pub(crate) ImpGlweSecretKey<BinaryKeyKind, Vec<u32>>);
+pub struct GlweSecretKey32(pub ImpGlweSecretKey<BinaryKeyKind, Vec<u32>>);
 impl AbstractEntity for GlweSecretKey32 {
     type Kind = GlweSecretKeyKind;
 }
