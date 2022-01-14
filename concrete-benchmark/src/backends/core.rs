@@ -32,6 +32,8 @@ pub fn bench() {
     glwe_ciphertext_zero_encryption::bench::<CoreEngine, GlweSecretKey64, GlweCiphertext64>(&mut criterion);
     glwe_secret_key_creation::bench::<CoreEngine, GlweSecretKey32>(&mut criterion);
     glwe_secret_key_creation::bench::<CoreEngine, GlweSecretKey64>(&mut criterion);
+    glwe_secret_key_to_lwe_secret_key_transmutation::bench::<CoreEngine, GlweSecretKey32, LweSecretKey32>(&mut criterion);
+    glwe_secret_key_to_lwe_secret_key_transmutation::bench::<CoreEngine, GlweSecretKey64, LweSecretKey64>(&mut criterion);
     lwe_bootstrap_key_conversion::bench::<CoreEngine, LweBootstrapKey32, FourierLweBootstrapKey32>(&mut criterion);
     lwe_bootstrap_key_conversion::bench::<CoreEngine, LweBootstrapKey64, FourierLweBootstrapKey64>(&mut criterion);
     lwe_bootstrap_key_creation::bench::<CoreEngine, LweSecretKey32, GlweSecretKey32, LweBootstrapKey32>(&mut criterion);

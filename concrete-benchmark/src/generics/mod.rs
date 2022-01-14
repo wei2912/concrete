@@ -16,6 +16,7 @@ pub mod glwe_ciphertext_vector_encryption;
 pub mod glwe_ciphertext_vector_zero_encryption;
 pub mod glwe_ciphertext_zero_encryption;
 pub mod glwe_secret_key_creation;
+pub mod glwe_secret_key_to_lwe_secret_key_transmutation;
 pub mod lwe_bootstrap_key_conversion;
 pub mod lwe_bootstrap_key_creation;
 pub mod lwe_ciphertext_cleartext_discarding_multiplication;
