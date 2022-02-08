@@ -191,3 +191,6 @@ pub use lwe_ciphertext_vector_discarding_affine_transformation::*;
 
 mod lwe_ciphertext_discarding_keyswitch;
 pub use lwe_ciphertext_discarding_keyswitch::*;
+
+// mod lwe_ciphertext_discarding_bootstrap;
+// pub use lwe_ciphertext_discarding_bootstrap::*;

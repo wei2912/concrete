@@ -92,6 +92,7 @@ fn test_bootstrap_noise<T: UnsignedTorus>() {
 
             // allocate ciphertext vectors
             let mut lwe_in = LweCiphertext::allocate(T::ZERO, lwe_dimension.to_lwe_size());
+
             let mut lwe_out =
                 LweCiphertext::allocate(T::ZERO, LweSize(rlwe_dimension.0 * polynomial_size.0 + 1));
             lwe_sk.encrypt_lwe(&mut lwe_in, &m0, std, &mut encryption_generator);
