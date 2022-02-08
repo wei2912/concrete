@@ -185,3 +185,6 @@ pub use lwe_ciphertext_cleartext_discarding_multiplication::*;
 
 mod glwe_ciphertext_encryption;
 pub use glwe_ciphertext_encryption::*;
+
+mod lwe_ciphertext_vector_discarding_affine_transformation;
+pub use lwe_ciphertext_vector_discarding_affine_transformation::*;
