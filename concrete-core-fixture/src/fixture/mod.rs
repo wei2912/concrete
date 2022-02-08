@@ -173,3 +173,6 @@ pub use cleartext_creation::*;
 
 mod lwe_ciphertext_encryption;
 pub use lwe_ciphertext_encryption::*;
+
+mod lwe_ciphertext_discarding_encryption;
+pub use lwe_ciphertext_discarding_encryption::*;
