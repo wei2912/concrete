@@ -106,59 +106,6 @@ fn test_keyswitch_u64() {
     test_keyswitch::<u64>();
 }
 
-fn test_encrypt_decrypt<T: UnsignedTorus>() {
-    //! encrypts a bunch of messages and decrypts them
-    //! warning: std_dev is not randomized
-    //! only assert with assert_delta_std_dev
-    // generate random settings
-    let nb_ct = random_ciphertext_count(100000);
-    let dimension = random_lwe_dimension(1000);
-    let std_dev = LogStandardDev::from_log_standard_dev(-25.);
-    let mut random_generator = RandomGenerator::new(None);
-    let mut secret_generator = SecretRandomGenerator::new(None);
-    let mut encryption_generator = EncryptionRandomGenerator::new(None);
-
-    // generate the secret key
-    let sk = LweSecretKey::generate_binary(dimension, &mut secret_generator);
-
-    // generate random messages
-    let messages = PlaintextList::from_tensor(random_generator.random_uniform_tensor(nb_ct.0));
-
-    // creation of tensors for our ciphertexts
-    let mut ciphertexts = LweList::allocate(T::ZERO, dimension.to_lwe_size(), nb_ct);
-
-    // encryption
-    sk.encrypt_lwe_list(
-        &mut ciphertexts,
-        &messages,
-        std_dev,
-        &mut encryption_generator,
-    );
-
-    // creation of a tensor for our decrypted messages
-    let mut decryptions = PlaintextList::allocate(T::ZERO, PlaintextCount(nb_ct.0));
-
-    // decryption
-    sk.decrypt_lwe_list(&mut decryptions, &ciphertexts);
-
-    // make sure that after decryption we recover the original plaintext
-    if nb_ct.0 < 7 {
-        assert_delta_std_dev(&messages, &decryptions, std_dev);
-    } else {
-        assert_noise_distribution(&messages, &decryptions, std_dev);
-    }
-}
-
-#[test]
-fn test_encrypt_decrypt_u32() {
-    test_encrypt_decrypt::<u32>()
-}
-
-#[test]
-fn test_encrypt_decrypt_u64() {
-    test_encrypt_decrypt::<u64>()
-}
-
 fn test_multisum_npe<T>()
 where
     T: UnsignedTorus + RandomGenerable<UniformMsb> + CastFrom<usize>,
