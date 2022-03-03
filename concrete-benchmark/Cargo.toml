@@ -6,7 +6,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-concrete-core = { path="../concrete-core" }
+concrete-core = { path="../concrete-core", features=["multithread"] }
 concrete-commons = { path="../concrete-commons" }
 criterion = "=0.3.5"
 

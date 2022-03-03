@@ -95,7 +95,7 @@ impl LweBootstrapKeyCreationEngine<LweSecretKey32, GlweSecretKey32, LweBootstrap
             decomposition_base_log,
             input_key.0.key_size(),
         );
-        key.fill_with_new_key(
+        key.par_fill_with_new_key(
             &input_key.0,
             &output_key.0,
             noise,
@@ -186,7 +186,7 @@ impl LweBootstrapKeyCreationEngine<LweSecretKey64, GlweSecretKey64, LweBootstrap
             decomposition_base_log,
             input_key.0.key_size(),
         );
-        key.fill_with_new_key(
+        key.par_fill_with_new_key(
             &input_key.0,
             &output_key.0,
             noise,
@@ -277,7 +277,7 @@ impl LweBootstrapKeyCreationEngine<LweSecretKey32, GlweSecretKey32, FourierLweBo
             decomposition_base_log,
             input_key.0.key_size(),
         );
-        key.fill_with_new_key(
+        key.par_fill_with_new_key(
             &input_key.0,
             &output_key.0,
             noise,
@@ -383,7 +383,7 @@ impl LweBootstrapKeyCreationEngine<LweSecretKey64, GlweSecretKey64, FourierLweBo
             decomposition_base_log,
             input_key.0.key_size(),
         );
-        key.fill_with_new_key(
+        key.par_fill_with_new_key(
             &input_key.0,
             &output_key.0,
             noise,
