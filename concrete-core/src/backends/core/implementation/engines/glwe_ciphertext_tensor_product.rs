@@ -1,10 +1,11 @@
-use crate::prelude::{GlweCiphertextTensorProductEngine, AbstractEngine, GlweCiphertextTensorProductError};
-use crate::backends::core::entities::GlweCiphertext32;
-use crate::backends::core::engines::CoreEngine;
-use crate::backends::core::private::crypto::glwe::{GlweCiphertext, FourierGlweCiphertext};
-use crate::backends::core::private::crypto::glwe::GlweCiphertext as ImplGlweCiphertext;
-use crate::specification::entities::GlweCiphertextEntity;
 use concrete_commons::parameters::GlweSize;
+
+use crate::backends::core::engines::CoreEngine;
+use crate::backends::core::entities::{FourierGlweCiphertext64, GlweCiphertext32, GlweCiphertext64, FourierGlweCiphertext32};
+use crate::backends::core::private::crypto::glwe::{FourierGlweCiphertext, GlweCiphertext};
+use crate::backends::core::private::crypto::glwe::GlweCiphertext as ImplGlweCiphertext;
+use crate::prelude::{AbstractEngine, GlweCiphertextTensorProductEngine, GlweCiphertextTensorProductError};
+use crate::specification::entities::GlweCiphertextEntity;
 
 /// # Description:
 /// Implementation of [`GlweTensorProductEngine`] for [`CoreEngine`] that operates on 32-bit
@@ -28,6 +29,37 @@ impl GlweCiphertextTensorProductEngine<GlweCiphertext32, GlweCiphertext32, GlweC
                                                        // we need to use this on FourierGLWECiphertexts32
                                                        input1: &FourierGlweCiphertext32,
                                                        input2: &GlweCiphertext32) -> GlweCiphertext32 {
+
+        let mut ciphertext = ImplGlweCiphertext::allocate(
+            0u32,
+            input1.polynomial_size(),
+            GlweSize(input1.glwe_dimension().0 * (3 + input1.glwe_dimension().0) * (1/2)),
+        );
+
+        // .0 accesses GLWE ciphertext inside input1
+        input1.0.tensor_product(input2)
+    }
+}
+
+impl GlweCiphertextTensorProductEngine<GlweCiphertext64, GlweCiphertext64, GlweCiphertext64>
+for CoreEngine{
+
+    fn tensor_product_glwe_ciphertext(&mut self,
+                                      input1: &GlweCiphertext64,
+                                      input2: &GlweCiphertext64) -> Result<GlweCiphertext64,
+        GlweCiphertextTensorProductError<Self::EngineError>> {
+        GlweCiphertextTensorProductError::perform_generic_checks(input1, input2)?;
+        Ok(unsafe { self.tensor_product_glwe_ciphertext_unchecked(input1, input2)})
+    }
+
+
+
+
+
+    unsafe fn tensor_product_glwe_ciphertext_unchecked(&mut self,
+                                                       // we need to use this on FourierGLWECiphertexts32
+                                                       input1: &FourierGlweCiphertext64,
+                                                       input2: &GlweCiphertext64) -> GlweCiphertext64 {
 
         let mut ciphertext = ImplGlweCiphertext::allocate(
             0u32,
