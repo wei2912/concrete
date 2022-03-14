@@ -1,5 +1,5 @@
 use concrete_commons::dispersion::{DispersionParameter, LogStandardDev, Variance};
-use concrete_commons::key_kinds::BinaryKeyKind;
+use concrete_commons::markers::BinaryKeyDistribution;
 use concrete_commons::parameters::{
     DecompositionBaseLog, DecompositionLevelCount, GlweDimension, LweDimension, LweSize,
     PlaintextCount, PolynomialSize,
@@ -124,7 +124,7 @@ fn test_external_product_generic<T: UnsignedTorus>() {
                 T,
                 Variance,
                 Variance,
-                BinaryKeyKind,
+                BinaryKeyDistribution,
             >(
                 PolynomialSize(polynomial_size),
                 rlwe_dimension,
@@ -238,15 +238,16 @@ fn test_cmux_0<T: UnsignedTorus>() {
         // call the NPE to find the theoretical amount of noise added by the cmux
         let variance_rlwe = std_dev_rlwe.get_variance();
         let variance_trgsw = std_dev_bsk.get_variance();
-        let output_variance = npe::estimate_cmux_noise_with_binary_ggsw::<T, _, _, _, BinaryKeyKind>(
-            rlwe_dimension,
-            PolynomialSize(polynomial_size),
-            base_log,
-            level,
-            Variance(variance_rlwe),
-            Variance(variance_rlwe),
-            Variance(variance_trgsw),
-        );
+        let output_variance =
+            npe::estimate_cmux_noise_with_binary_ggsw::<T, _, _, _, BinaryKeyDistribution>(
+                rlwe_dimension,
+                PolynomialSize(polynomial_size),
+                base_log,
+                level,
+                Variance(variance_rlwe),
+                Variance(variance_rlwe),
+                Variance(variance_trgsw),
+            );
         // test
         assert_noise_distribution(&new_messages, &m0, output_variance);
     }
@@ -349,15 +350,16 @@ fn test_cmux_1<T: UnsignedTorus>() {
         // call the NPE to find the theoretical amount of noise added by the cmux
         let variance_rlwe = std_dev_rlwe.get_variance();
         let variance_trgsw = std_dev_bsk.get_variance();
-        let output_variance = npe::estimate_cmux_noise_with_binary_ggsw::<T, _, _, _, BinaryKeyKind>(
-            rlwe_dimension,
-            PolynomialSize(polynomial_size),
-            base_log,
-            level,
-            Variance(variance_rlwe),
-            Variance(variance_rlwe),
-            Variance(variance_trgsw),
-        );
+        let output_variance =
+            npe::estimate_cmux_noise_with_binary_ggsw::<T, _, _, _, BinaryKeyDistribution>(
+                rlwe_dimension,
+                PolynomialSize(polynomial_size),
+                base_log,
+                level,
+                Variance(variance_rlwe),
+                Variance(variance_rlwe),
+                Variance(variance_trgsw),
+            );
         // test
         assert_noise_distribution(&new_messages, &m1, output_variance);
     }
