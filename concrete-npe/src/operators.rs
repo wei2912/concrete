@@ -1,10 +1,15 @@
 /// Contains material needed to estimate the growth of the noise when performing homomorphic
 /// computation
 use concrete_commons::dispersion::{DispersionParameter, Variance};
+use concrete_commons::key_kinds::{BinaryKeyKind, GaussianKeyKind, TernaryKeyKind};
+use concrete_commons::markers::{
+    BinaryKeyDistribution, GaussianKeyDistribution, KeyDistributionMarker, TernaryKeyDistribution,
+};
 use concrete_commons::numeric::{CastInto, UnsignedInteger};
 use concrete_commons::parameters::{
     DecompositionBaseLog, DecompositionLevelCount, GlweDimension, LweDimension, PolynomialSize,
 };
+use std::any::TypeId;
 
 use super::*;
 
@@ -435,7 +440,7 @@ where
 /// use concrete_commons::parameters::{
 ///     DecompositionBaseLog, DecompositionLevelCount, LweDimension,
 /// };
-/// use concrete_npe::estimate_keyswitch_noise_lwe_to_glwe_with_constant_terms;
+/// use _estimate_keyswitch_noise_lwe_to_glwe_with_constant_terms;
 /// let lwe_mask_size = LweDimension(630);
 /// let l_ks = DecompositionLevelCount(4);
 /// let base_log = DecompositionBaseLog(7);
@@ -461,8 +466,30 @@ where
     T: UnsignedInteger,
     D1: DispersionParameter,
     D2: DispersionParameter,
-    K: KeyDispersion,
+    K: KeyDistributionMarker,
 {
+    let k_type_id = TypeId::of::<K>();
+
+    let variance_key_coefficient = if k_type_id == TypeId::of::<BinaryKeyDistribution>() {
+        BinaryKeyKind::variance_key_coefficient::<T>()
+    } else if k_type_id == TypeId::of::<TernaryKeyDistribution>() {
+        TernaryKeyKind::variance_key_coefficient::<T>()
+    } else if k_type_id == TypeId::of::<GaussianKeyDistribution>() {
+        GaussianKeyKind::variance_key_coefficient::<T>()
+    } else {
+        panic!("Unknown key distribution encountered.")
+    };
+
+    let expectation_key_coefficient = if k_type_id == TypeId::of::<BinaryKeyDistribution>() {
+        BinaryKeyKind::expectation_key_coefficient()
+    } else if k_type_id == TypeId::of::<TernaryKeyDistribution>() {
+        TernaryKeyKind::expectation_key_coefficient()
+    } else if k_type_id == TypeId::of::<GaussianKeyDistribution>() {
+        GaussianKeyKind::expectation_key_coefficient()
+    } else {
+        panic!("Unknown key distribution encountered.")
+    };
+
     let n = lwe_mask_size.0 as f64;
     let base = (1 << base_log.0) as f64;
     let q_square = f64::powi(2., (2 * T::BITS) as i32);
@@ -473,11 +500,11 @@ where
     // res 2
     let res_2 = n
         * (q_square / (12. * f64::powi(base, 2 * level.0 as i32)) - 1. / 12.)
-        * (K::variance_key_coefficient::<T>().get_modular_variance::<T>()
-            + square(K::expectation_key_coefficient()));
+        * (variance_key_coefficient.get_modular_variance::<T>()
+            + square(expectation_key_coefficient));
 
     // res 3
-    let res_3 = n / 4. * K::variance_key_coefficient::<T>().get_modular_variance::<T>();
+    let res_3 = n / 4. * variance_key_coefficient.get_modular_variance::<T>();
 
     // res 4
     let res_4 =
