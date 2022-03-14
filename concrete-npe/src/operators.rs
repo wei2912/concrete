@@ -733,8 +733,30 @@ pub fn estimate_pbs_noise<T, D, K>(
 where
     T: UnsignedInteger,
     D: DispersionParameter,
-    K: KeyDispersion,
+    K: KeyDistributionMarker,
 {
+    let k_type_id = TypeId::of::<K>();
+
+    let variance_key_coefficient = if k_type_id == TypeId::of::<BinaryKeyDistribution>() {
+        BinaryKeyKind::variance_key_coefficient::<T>()
+    } else if k_type_id == TypeId::of::<TernaryKeyDistribution>() {
+        TernaryKeyKind::variance_key_coefficient::<T>()
+    } else if k_type_id == TypeId::of::<GaussianKeyDistribution>() {
+        GaussianKeyKind::variance_key_coefficient::<T>()
+    } else {
+        panic!("Unknown key distribution encountered.")
+    };
+
+    let expectation_key_coefficient = if k_type_id == TypeId::of::<BinaryKeyDistribution>() {
+        BinaryKeyKind::expectation_key_coefficient()
+    } else if k_type_id == TypeId::of::<TernaryKeyDistribution>() {
+        TernaryKeyKind::expectation_key_coefficient()
+    } else if k_type_id == TypeId::of::<GaussianKeyDistribution>() {
+        GaussianKeyKind::expectation_key_coefficient()
+    } else {
+        panic!("Unknown key distribution encountered.")
+    };
+
     let n = lwe_mask_size.0 as f64;
     let k = rlwe_mask_size.0 as f64;
     let b = (1 << base_log.0) as f64;
@@ -748,10 +770,10 @@ where
     let res_2 = n * (q_square - b2l) / (24. * b2l)
         * (1.
             + k * big_n
-                * (K::variance_key_coefficient::<T>().get_modular_variance::<T>()
-                    + square(K::expectation_key_coefficient())))
-        + n * k * big_n / 8. * K::variance_key_coefficient::<T>().get_modular_variance::<T>()
-        + n / 16. * square(1. - k * big_n * K::expectation_key_coefficient());
+                * (variance_key_coefficient.get_modular_variance::<T>()
+                    + square(expectation_key_coefficient)))
+        + n * k * big_n / 8. * variance_key_coefficient.get_modular_variance::<T>()
+        + n / 16. * square(1. - k * big_n * expectation_key_coefficient);
     Variance::from_modular_variance::<T>(res_1 + res_2)
 }
 
