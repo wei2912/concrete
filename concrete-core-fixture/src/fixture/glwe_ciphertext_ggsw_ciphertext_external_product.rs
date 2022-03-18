@@ -101,11 +101,7 @@ where
     ) -> Self::RepetitionPrototypes {
         let proto_secret_key =
             maker.new_glwe_secret_key(parameters.glwe_dimension, parameters.polynomial_size);
-        let raw_plaintext = Precision::Raw::pick(&[
-            Precision::Raw::zero(),
-            Precision::Raw::one(),
-            Precision::Raw::power_of_two(1),
-        ]);
+        let raw_plaintext = Precision::Raw::one();
         let proto_plaintext = maker.transform_raw_to_plaintext(&raw_plaintext);
         let proto_ggsw = maker.encrypt_plaintext_to_ggsw_ciphertext(
             &proto_secret_key,
@@ -123,7 +119,10 @@ where
         repetition_proto: &Self::RepetitionPrototypes,
     ) -> Self::SamplePrototypes {
         let (_, proto_secret_key, _) = repetition_proto;
-        let raw_plaintext_vector = Precision::Raw::uniform_vec(parameters.polynomial_size.0);
+        let raw_plaintext_vector = Precision::Raw::uniform_n_msb_vec(
+            parameters.decomposition_base_log.0,
+            parameters.polynomial_size.0,
+        );
         let proto_plaintext_vector =
             maker.transform_raw_vec_to_plaintext_vector(&raw_plaintext_vector);
         let proto_glwe_ciphertext = maker.encrypt_plaintext_vector_to_glwe_ciphertext(
