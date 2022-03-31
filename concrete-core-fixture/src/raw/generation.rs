@@ -1,6 +1,7 @@
 //! A module containing sampling entry points for raw integers
 use concrete_commons::numeric::{CastInto, UnsignedInteger};
 use concrete_core::backends::core::private::math::random::RandomGenerator;
+use concrete_core::prelude::numeric::Numeric;
 use std::fmt::Debug;
 use std::ops::Range;
 

@@ -17,3 +17,21 @@ impl AbstractEntity for Cleartext64 {
     type Kind = CleartextKind;
 }
 impl CleartextEntity for Cleartext64 {}
+
+/// A structure representing a cleartext wrapping a 64-bit float
+/// to be used with 64-bits integers.
+#[derive(Debug, Clone, PartialEq)]
+pub struct FloatCleartext32(pub(crate) ImplCleartext<f64>);
+impl AbstractEntity for FloatCleartext32 {
+    type Kind = CleartextKind;
+}
+impl CleartextEntity for FloatCleartext32 {}
+
+/// A structure representing a cleartext wrapping a 64-bit float
+/// to be used with 64-bits integers.
+#[derive(Debug, Clone, PartialEq)]
+pub struct FloatCleartext64(pub(crate) ImplCleartext<f64>);
+impl AbstractEntity for FloatCleartext64 {
+    type Kind = CleartextKind;
+}
+impl CleartextEntity for FloatCleartext64 {}

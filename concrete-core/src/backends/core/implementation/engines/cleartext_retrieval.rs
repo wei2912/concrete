@@ -1,3 +1,4 @@
+use crate::backends::core::entities::CleartextF64;
 use crate::backends::core::implementation::engines::CoreEngine;
 use crate::backends::core::implementation::entities::{Cleartext32, Cleartext64};
 use crate::specification::engines::{CleartextRetrievalEngine, CleartextRetrievalError};
@@ -66,6 +67,40 @@ impl CleartextRetrievalEngine<Cleartext64, u64> for CoreEngine {
     }
 
     unsafe fn retrieve_cleartext_unchecked(&mut self, cleartext: &Cleartext64) -> u64 {
+        cleartext.0 .0
+    }
+}
+
+/// # Description:
+/// Implementation of [`CleartextRetrievalEngine`] for [`CoreEngine`] that operates on 64 bits
+///  floats.
+impl CleartextRetrievalEngine<CleartextF64, f64> for CoreEngine {
+    /// # Example:
+    /// ```
+    /// use concrete_core::prelude::*;
+    /// # use std::error::Error;
+    ///
+    /// # fn main() -> Result<(), Box<dyn Error>> {
+    /// let input: f64 = 3_f64;
+    ///
+    /// let mut engine = CoreEngine::new()?;
+    /// let cleartext: CleartextF64 = engine.create_cleartext(&input)?;
+    /// let output: f64 = engine.retrieve_cleartext(&cleartext)?;
+    ///
+    /// assert_eq!(output, 3_f64);
+    /// engine.destroy(cleartext)?;
+    /// #
+    /// # Ok(())
+    /// # }
+    /// ```
+    fn retrieve_cleartext(
+        &mut self,
+        cleartext: &CleartextF64,
+    ) -> Result<f64, CleartextRetrievalError<Self::EngineError>> {
+        Ok(unsafe { self.retrieve_cleartext_unchecked(cleartext) })
+    }
+
+    unsafe fn retrieve_cleartext_unchecked(&mut self, cleartext: &CleartextF64) -> f64 {
         cleartext.0 .0
     }
 }

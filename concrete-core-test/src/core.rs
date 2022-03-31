@@ -48,6 +48,8 @@ test! {
     (GlweCiphertextDiscardingDecryptionFixture, (PlaintextVector, GlweSecretKey, GlweCiphertext)),
     (GlweCiphertextDiscardingEncryptionFixture, (PlaintextVector, GlweSecretKey, GlweCiphertext)),
     (GlweCiphertextEncryptionFixture, (PlaintextVector, GlweSecretKey, GlweCiphertext)),
+    (GlweCiphertextTensorProductFixture, (GlweCiphertext, GlweCiphertext, GlweCiphertext,
+        FloatCleartext)),
     (GlweCiphertextTrivialEncryptionFixture, (PlaintextVector, GlweCiphertext)),
     (GlweCiphertextZeroEncryptionFixture, (GlweSecretKey, GlweCiphertext)),
     (GlweCiphertextVectorEncryptionFixture, (PlaintextVector, GlweSecretKey, GlweCiphertextVector)),
