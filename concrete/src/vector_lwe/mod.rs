@@ -2233,9 +2233,9 @@ impl VectorLWE {
         let mut ct1 = self.extract_nth(n_self)?;
         let mut ct2 = self.extract_nth(n_self)?;
 
-        // return an error if nb_bit_precision < 2
-        if ct1.encoders[0].nb_bit_precision < 2 {
-            return Err(NotEnoughPaddingError!(ct1.encoders[0].nb_bit_precision, 2));
+        // return an error if nb_bit_padding < 2
+        if ct1.encoders[0].nb_bit_padding < 2 {
+            return Err(NotEnoughPaddingError!(ct1.encoders[0].nb_bit_padding, 2));
         }
 
         // extract once from ct

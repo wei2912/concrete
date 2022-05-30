@@ -1943,9 +1943,9 @@ impl LWE {
         let mut ct1 = self.clone();
         let mut ct2 = self.clone();
 
-        // return an error if nb_bit_precision < 2
-        if ct1.encoder.nb_bit_precision < 2 {
-            return Err(NotEnoughPaddingError!(ct1.encoder.nb_bit_precision, 2));
+        // return an error if nb_bit_padding < 2
+        if ct1.encoder.nb_bit_padding < 2 {
+            return Err(NotEnoughPaddingError!(ct1.encoder.nb_bit_padding, 2));
         }
 
         // extract once from ct
