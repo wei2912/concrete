@@ -411,35 +411,62 @@ impl Encoder {
             let new_max = (self.o * self.o) / 4.;
             let old_max = self.o + self.delta - self.get_granularity();
             let new_min = (old_max * old_max) / 4.;
-            Ok(Encoder::new(
-                new_min,
-                new_max,
-                self.nb_bit_precision,
-                nb_bit_padding,
-            )?)
+            Ok(if !self.round {
+                Encoder::new(
+                    new_min,
+                    new_max,
+                    self.nb_bit_precision,
+                    nb_bit_padding,
+                )?
+            } else {
+                Encoder::new_rounding_context(
+                    new_min,
+                    new_max,
+                    self.nb_bit_precision,
+                    nb_bit_padding
+                )?
+            })
         } else if self.o > 0. {
             // only positive values in the interval
             let new_min = (self.o * self.o) / 4.;
             let old_max = self.o + self.delta - self.get_granularity();
             let new_max = (old_max * old_max) / 4.;
-            Ok(Encoder::new(
-                new_min,
-                new_max,
-                self.nb_bit_precision,
-                nb_bit_padding,
-            )?)
+            Ok(if !self.round {
+                Encoder::new(
+                    new_min,
+                    new_max,
+                    self.nb_bit_precision,
+                    nb_bit_padding,
+                )?
+            } else {
+                Encoder::new_rounding_context(
+                    new_min,
+                    new_max,
+                    self.nb_bit_precision,
+                    nb_bit_padding
+                )?
+            })
         } else {
             // 0 is in the interval
             let new_min: f64 = 0.;
             let old_max = self.o + self.delta - self.get_granularity();
             let max = old_max.max(-self.o);
             let new_max = max * max / 4.;
-            Ok(Encoder::new(
-                new_min,
-                new_max,
-                self.nb_bit_precision,
-                nb_bit_padding,
-            )?)
+            Ok(if !self.round {
+                Encoder::new(
+                    new_min,
+                    new_max,
+                    self.nb_bit_precision,
+                    nb_bit_padding,
+                )?
+            } else {
+                Encoder::new_rounding_context(
+                    new_min,
+                    new_max,
+                    self.nb_bit_precision,
+                    nb_bit_padding
+                )?
+            })
         }
     }
 
